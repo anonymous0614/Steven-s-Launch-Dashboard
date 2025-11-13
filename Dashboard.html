@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steven's Charter Flight School - Launch Pack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .page-content {
+            display: none; /* All pages hidden by default */
+        }
+        .page-content.active {
+            display: block; /* Active page is shown */
+        }
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        .nav-link.active {
+            background-color: #4f46e5; /* Indigo */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .task-wrapper .task-item {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .task-wrapper .checkbox-icon {
+            cursor: pointer;
+            z-index: 10; /* Make sure checkbox is clickable */
+            transition: all 0.2s ease;
+        }
+        .task-wrapper:hover .task-item {
+            background-color: #f9fafb; /* Gray-50 on hover */
+        }
+        .task-wrapper .task-text {
+            flex-grow: 1;
+            margin-left: 0.75rem;
+        }
+        .task-wrapper.completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .task-wrapper.completed .task-item {
+            color: #6b7280; /* Gray-500 */
+        }
+        .task-wrapper.completed .checkbox-icon {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+        .task-wrapper.completed .checkbox-icon svg {
+            display: block;
+        }
+        .task-details {
+            display: none; /* Hidden by default */
+            transition: all 0.3s ease-in-out;
+        }
+        .task-details.open {
+            display: block; /* Shown when toggled */
+        }
+        .task-toggle-icon {
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+        .task-toggle-icon.open {
+            transform: rotate(180deg);
+        }
+        .tab-link {
+            transition: all 0.2s ease;
+        }
+        .tab-link.active {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Mobile sidebar */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-900">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="w-64 bg-white shadow-lg fixed top-0 left-0 h-full z-30 md:relative md:transform-none">
+            <div class="p-6">
+                <a href="#" class="flex items-center space-x-2">
+                    <svg class="h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>
+                    <span class="text-lg font-bold text-gray-800">Steven's Launch Pack</span>
+                </a>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="px-6 py-4">
+                <span class="text-xs font-semibold text-gray-500 uppercase">Project Progress</span>
+                <div class="mt-2 bg-gray-200 rounded-full h-2.5">
+                    <div id="total-progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <div id="total-progress-text" class="text-sm font-medium text-gray-600 text-center mt-1">0% Complete</div>
+            </div>
+
+            <!-- Navigation -->
+            <ul class="space-y-2 p-4">
+                <li><a href="#overview" class="nav-link active flex items-center p-3 rounded-lg hover:bg-indigo-50" data-page="overview">
+                    <svg class="h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    <span>Overview</span>
+                </a></li>
+                <li><a href="#launch-plan" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-50" data-page="launch-plan">
+                    <svg class="h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                    <span>Launch Plan</span>
+                </a></li>
+                <li><a href="#regulations" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-50" data-page="regulations">
+                    <svg class="h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.105 0 4.162-.83 5.614-2.243a8.967 8.967 0 0 1 5.614 2.243c1.052 0 2.062-.18 3-.512V3.75a8.987 8.987 0 0 0-3-.512A8.967 8.967 0 0 0 12 6.042Zm0 0v.003Z" /></svg>
+                    <span>Regulations</span>
+                </a></li>
+                <li><a href="#market-plan" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-50" data-page="market-plan">
+                    <svg class="h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" /></svg>
+                    <span>Go-to-Market</span>
+                </a></li>
+                <li><a href="#ai-log" class="nav-link flex items-center p-3 rounded-lg hover:bg-indigo-50" data-page="ai-log">
+                    <svg class="h-5 w-5 mr-3 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 21v-1.5M12 3v1.5M12 21v-1.5m3.75-18v1.5m-7.5 18v-1.5m7.5-1.5H12m0 0H8.25m3.75 0v1.5m0-1.5v-1.5m3.75 0v1.5m0-1.5v-1.5" /></svg>
+                    <span>AI Process Log</span>
+                </a></li>
+            </ul>
+
+            <!-- Mobile Close Button -->
+            <button id="close-menu" class="md:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="flex items-center justify-between h-16 px-4 md:px-8">
+                    <!-- Mobile Menu Button -->
+                    <button id="open-menu" class="md:hidden text-gray-500 hover:text-gray-800">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    </button>
+                    <div class="flex-1">
+                        <!-- Header title can be dynamic -->
+                        <h1 id="page-title" class="text-xl font-semibold text-gray-900">1-Page Overview</h1>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto p-4 md:p-8">
+
+                <!-- 1. Overview Page -->
+                <div id="page-overview" class="page-content active">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white shadow-lg rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">The Business</h3>
+                            <p class="text-gray-700">"Steven's Charter Flight School" is a premier, hybrid aviation company. It operates as both an FAA-approved pilot training academy (the "School") and an on-demand private air carrier (the "Charter").</p>
+                        </div>
+                        <div class="bg-white shadow-lg rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">The Mission</h3>
+                            <p class="text-gray-700">To provide the highest standard of aviation safety, education, and convenience. We aim to be the region's top-choice provider for aspiring pilots seeking a career and for business clients seeking efficient, reliable travel.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-white shadow-lg rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">Target Audiences</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-medium text-gray-800">Flight School:</h4>
+                                <ul class="list-disc list-inside text-gray-700 mt-2">
+                                    <li><b>Career-Track Students:</b> Individuals seeking a fast, structured path to becoming a professional pilot.</li>
+                                    <li><b>Hobbyist Flyers:</b> Professionals, business owners, or retirees who want to learn to fly for personal transportation or recreation.</li>
+                                    <li><b>Existing Pilots:</b> Current pilots seeking advanced ratings, such as an Instrument Rating or Multi-Engine Rating.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Charter:</h4>
+                                <ul class="list-disc list-inside text-gray-700 mt-2">
+                                    <li><b>Business Executives:</b> Regional business leaders who need to visit multiple sites, clients, or regional offices in a single day.</li>
+                                    <li><b>Time-Sensitive Travelers:</b> Individuals needing to reach destinations not well-served by major airlines or who value privacy.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-white shadow-lg rounded-lg p-6 border-l-4 border-indigo-600">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">Unique Selling Proposition (USP)</h3>
+                        <p class="text-gray-700 font-medium mb-2">We are a full-lifecycle aviation partner.</p>
+                        <p class="text-gray-700">Our hybrid model creates a unique synergy: We offer a seamless pathway from a student's first "Discovery Flight" to a professional pilot career. Our charter clients benefit from a fleet and professional pilot corps that are maintained to the exacting standards of both Part 135 and Part 141 regulations.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Launch Plan Page -->
+                <div id="page-launch-plan" class="page-content">
+                    
+                    <!-- Tabs for Phases -->
+                    <div class="mb-6">
+                        <nav class="flex flex-wrap -mb-px border-b border-gray-200" aria-label="Tabs">
+                            <a href="#phase1" class="tab-link active w-full md:w-auto text-center md:text-left px-4 py-3 font-medium text-gray-600 border-b-2 border-transparent hover:text-indigo-600 hover:border-indigo-300 rounded-t-lg" data-tab="phase1">Phase 1: Foundation</a>
+                            <a href="#phase2" class="tab-link w-full md:w-auto text-center md:text-left px-4 py-3 font-medium text-gray-600 border-b-2 border-transparent hover:text-indigo-600 hover:border-indigo-300 rounded-t-lg" data-tab="phase2">Phase 2: FAA Certification</a>
+                            <a href="#phase3" class="tab-link w-full md:w-auto text-center md:text-left px-4 py-3 font-medium text-gray-600 border-b-2 border-transparent hover:text-indigo-600 hover:border-indigo-300 rounded-t-lg" data-tab="phase3">Phase 3: Assets & Team</a>
+                            <a href="#phase4" class="tab-link w-full md:w-auto text-center md:text-left px-4 py-3 font-medium text-gray-600 border-b-2 border-transparent hover:text-indigo-600 hover:border-indigo-300 rounded-t-lg" data-tab="phase4">Phase 4: Go-Live</a>
+                        </nav>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="bg-white shadow-lg rounded-lg p-6">
+                        
+                        <!-- Phase 1 Content -->
+                        <div id="tab-phase1" class="tab-content active">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700">Phase 1: Foundation & Legal</h3>
+                            <div class="space-y-2">
+                                <!-- Task 1 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Develop 5-year business plan</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Include: Executive Summary, Market Analysis (competitors, TAM), Services Offered (pricing), Fleet Acquisition Plan (lease vs. buy), and Financial Projections (P&L, cash flow).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 2 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Secure startup capital</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Prepare pitch deck. Approach aviation-friendly local banks, SBA lenders, and private investors.</li>
+                                            <li>Capital must cover aircraft deposits, insurance, FAA fees, and 6+ months of operating runway.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 3 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Form legal entity (LLC or S-Corp)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Consult with an aviation attorney.</li>
+                                            <li>Ensure all corporate documents correctly reflect U.S. citizenship as required by 14 CFR § 119.33 for Part 135.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 4 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Secure physical location at an airport</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>This is a firm FAA requirement for both certificates.</li>
+                                            <li>Lease hangar space, an office in an FBO, or a dedicated building sufficient for records, training, and FAA inspection.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 5 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Identify key management personnel</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Identify candidates for Part 135 (Dir. of Ops, Chief Pilot, Dir. of Maintenance) and Part 141 (Chief Flight Instructor).</li>
+                                            <li>Verify they meet the specific experience requirements of 14 CFR § 119 and 14 CFR § 141.35.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 6 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Consult aviation attorney on regulatory plan</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Review your Part 135, 141, and 61 compliance strategy with legal counsel *before* your first FAA meeting.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phase 2 Content -->
+                        <div id="tab-phase2" class="tab-content">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700">Phase 2: FAA Certification & Compliance</h3>
+                            <p class="text-sm text-yellow-700 bg-yellow-50 p-3 rounded-lg mb-4"><b>Note:</b> These two certification processes (Part 141 & Part 135) are separate, complex, and should be started concurrently. Begin by contacting your local FAA FSDO.</p>
+                            
+                            <h4 class="font-semibold text-gray-800 mb-2">For the Flight School (Part 141)</h4>
+                            <div class="space-y-2 mb-6">
+                                <!-- Task 1 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Schedule Part 141 pre-application meeting</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Call your local FSDO. State your intent to seek Part 141 certification. This meeting is to establish a relationship and understand their specific requirements.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 2 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Submit formal Letter of Intent (Part 141)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>A formal letter to the FSDO outlining your proposed school, courses, aircraft, and key personnel. This officially starts the process.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 3 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Submit formal application (FAA Form 8420-8)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>This is the official "Application for Pilot School Certification." It must be submitted with your TCOs, syllabus, and other required documents.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 4 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Develop & submit Training Course Outlines (TCOs)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>This is the most time-consuming part. Each course (Private, Instrument, Commercial) needs its own TCO, detailing every lesson, objective, and standard.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 5 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Pass FAA inspection (Part 141)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>The FAA will inspect your facilities, aircraft (logs, ADs), instructor records, and your record-keeping system to ensure they match your manuals.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 6 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Receive Part 141 Air Agency Certificate</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>After all phases are complete and any discrepancies are fixed, the FSDO will issue your certificate.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold text-gray-800 mb-2">For the Charter Service (Part 135)</h4>
+                            <div class="space-y-2">
+                                <!-- Task 1 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Schedule Part 135 pre-application meeting</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>A separate, more intensive meeting with the FSDO. You will need to present your business case and proposed management team.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 2 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Submit Pre-application Statement of Intent (PASI)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Use FAA Form 8400-6. This formally notifies the FAA and allows them to assign a Certification Project Manager (CPM) to your project.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 3 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Submit formal Part 135 application & SOE</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Includes the Schedule of Events (SOE) - a timeline you and the FAA agree on for submitting all required documents.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 4 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Write, submit, & get approval for SOC</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Statement of Compliance (SOC): A line-by-line document listing every Part 135 rule and *how* your operation will comply (with manual references).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 5 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Write, submit, & get approval for GOM</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>General Operations Manual (GOM): Your company's "bible" detailing all flight/pilot procedures. Must be approved by the FAA.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 6 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Write, submit, & get approval for GMM</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>General Maintenance Manual (GMM): Details your maintenance procedures, how you track aircraft time, and the Director of Maintenance's duties.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 7 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Pass FAA inspection & proving flights (Part 135)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>FAA inspects aircraft, manuals, and key personnel.</li>
+                                            <li>Culminates in "proving flights" where FAA inspectors observe your team conduct simulated charter flights.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 8 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Receive Part 135 Air Carrier Certificate</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Once all 5 phases are complete, the FAA issues your certificate and OpSpecs. You are now a legal air carrier.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phase 3 Content -->
+                        <div id="tab-phase3" class="tab-content">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700">Phase 3: Asset & Team Setup</h3>
+                            <div class="space-y-2">
+                                <!-- Task 1 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Acquire or lease training aircraft (e.g., C172)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Ensure aircraft are on a 100-hour inspection schedule.</li>
+                                            <li>Organize all maintenance records (logs, AD compliance) for FAA inspection.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 2 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Acquire or lease charter aircraft</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Must have a 6-month "exclusive use" lease, at minimum.</li>
+                                            <li>Aircraft must be formally added to your Part 135 Operations Specifications (OpSpecs).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 3 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Secure comprehensive aviation insurance</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Get hull and liability coverage. Part 135 requires "commercial" liability, which is a higher limit.</li>
+                                            <li>Your insurer will need to approve your pilots and training programs.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 4 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Formally hire Part 141 Chief Flight Instructor</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Must meet experience requirements of 14 CFR § 141.35.</li>
+                                            <li>Their resume and qualifications must be submitted to the FSDO for approval.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 5 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Formally hire Part 135 Management</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Hire Director of Operations, Chief Pilot, and Director of Maintenance.</li>
+                                            <li>All three must meet strict 14 CFR § 119 experience requirements and be approved *by name* by the FAA.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 6 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Hire initial CFIs and Charter Pilots</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>CFIs will conduct Part 61/141 training.</li>
+                                            <li>Charter pilots must be trained and "check-ridden" according to your Part 135 GOM and added to your roster.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phase 4 Content -->
+                        <div id="tab-phase4" class="tab-content">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700">Phase 4: Operations & Go-Live</h3>
+                            <div class="space-y-2">
+                                <!-- Task 1 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Implement flight scheduling software</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>e.g., Flight Schedule Pro, TASC, or SchedulePointe.</li>
+                                            <li>This system will manage aircraft, instructor, and student schedules, plus billing and maintenance (Hobbs/Tach) tracking.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 2 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Set up final accounting and payment systems</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Integrate your scheduling software with an accounting system (like QuickBooks).</li>
+                                            <li>Set up merchant accounts to take credit card payments.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 3 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Receive all final, signed certificates from FAA</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>The FSDO will formally issue your Part 141 Air Agency Certificate and your Part 135 Air Carrier Certificate (with OpSpecs). Frame these.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 4 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Execute "Go-to-Market" plan</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Launch your website, claim your Google Business Profile, and run your first "Discovery Flight" ad campaign. (See Go-to-Market tab).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 5 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Conduct first official training flight</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Your first Part 141 (or 61) student. Ensure all records are filled out *exactly* as specified in your TCO and record-keeping manual.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Task 6 -->
+                                <div class="task-wrapper border border-transparent rounded-lg">
+                                    <div class="task-item flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center flex-grow">
+                                            <div class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-md flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-3 h-3 text-white fill-current hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                                            </div>
+                                            <span class="task-text">Conduct first paid charter flight (Part 135)</span>
+                                        </div>
+                                        <svg class="task-toggle-icon h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                    </div>
+                                    <div class="task-details hidden bg-white p-4 ml-8 rounded-b-lg border-l border-r border-b border-gray-200">
+                                        <ul class="list-disc list-inside text-gray-700 text-sm">
+                                            <li>Your first Part 135 flight for compensation. Ensure all pilot, aircraft, and passenger records are 100% compliant with your GOM.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 3. Regulations Page -->
+                <div id="page-regulations" class="page-content">
+                    <p class="mb-6 text-gray-700">This is a simplified guide to the essential FAA regulations. You must read the full text and consult with your FSDO and aviation legal counsel.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Part 61 -->
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                                <span class="text-lg font-semibold text-indigo-700">✈️ FAA Part 61: Pilot Certification</span>
+                                <svg class="accordion-icon h-6 w-6 text-gray-500 transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div class="accordion-content hidden px-6 pb-6">
+                                <p class="text-gray-700 mb-4"><b>What It Is:</b> These are the <b>base rules for all pilots</b>. Part 61 defines the minimum aeronautical experience (flight hours) and knowledge required to earn a pilot certificate (Private, Commercial, ATP, etc.).</p>
+                                <p class="text-gray-700 mb-4"><b>How You'll Use It:</b> Any Certified Flight Instructor (CFI) can train a student under Part 61 rules. It's flexible, "pay-as-you-go," and doesn't require a structured syllabus. Your school can offer Part 61 training from day one to generate revenue while pursuing Part 141 certification.</p>
+                                <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-D/part-61" target="_blank" rel="noopener noreferrer" class="inline-block text-indigo-600 font-medium hover:text-indigo-800">Source: 14 CFR Part 61 &rarr;</a>
+                            </div>
+                        </div>
+
+                        <!-- Part 141 -->
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                                <span class="text-lg font-semibold text-indigo-700">🎓 FAA Part 141: Pilot Schools</span>
+                                <svg class="accordion-icon h-6 w-6 text-gray-500 transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div class="accordion-content hidden px-6 pb-6">
+                                <p class="text-gray-700 mb-4"><b>What It Is:</b> These are the rules for <b>FAA-certificated pilot schools</b>. To be a Part 141 school, you must have an FAA-approved, structured training curriculum, syllabus, facilities, and aircraft, and you are subject to regular FAA surveillance.</p>
+                                <p class="text-gray-700 mb-4"><b>How You'll Use It:</b> This is your "university" track. The main benefit is that your students can be certified with <b>fewer minimum flight hours</b> (e.g., 190 hours for a Commercial Pilot Certificate vs. 250 under Part 61). It's also required for your school to accept G.I. Bill® / V.A. benefits.</p>
+                                <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-H/part-141" target="_blank" rel="noopener noreferrer" class="inline-block text-indigo-600 font-medium hover:text-indigo-800">Source: 14 CFR Part 141 &rarr;</a>
+                            </div>
+                        </div>
+
+                        <!-- Part 135 -->
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-6 text-left">
+                                <span class="text-lg font-semibold text-indigo-700">💼 FAA Part 135: Charter Operations</span>
+                                <svg class="accordion-icon h-6 w-6 text-gray-500 transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div class="accordion-content hidden px-6 pb-6">
+                                <p class="text-gray-700 mb-4"><b>What It Is:</b> This is the <b>Air Carrier Certificate</b> that allows you to fly passengers for compensation in an "on-demand" (unscheduled) setting. These rules govern everything from pilot rest times and training to aircraft maintenance and operational procedures.</p>
+                                <p class="text-gray-700 mb-4"><b>How You'll Use It:</b> This is your entire charter business. It is a rigorous, airline-style certification that gives clients (and your insurer) confidence in your high standard of safety and professionalism. <b>You cannot legally fly a single charter client for money without this certificate.</b></p>
+                                <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-G/part-135" target="_blank" rel="noopener noreferrer" class="inline-block text-indigo-600 font-medium hover:text-indigo-800">Source: 14 CFR Part 135 &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Go-to-Market Page -->
+                <div id="page-market-plan" class="page-content">
+                    
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-700">Target Audience Personas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white shadow-lg rounded-lg p-6">
+                            <h4 class="font-semibold text-lg mb-2 text-gray-800">The Student: "Career Chris"</h4>
+                            <p class="mb-2"><b>Who:</b> 22 years old, college grad, wants to be an airline pilot.</p>
+                            <p class="mb-2"><b>Needs:</b> The fastest, most-efficient, and most structured path to 1,500 hours.</p>
+                            <p><b>Marketing:</b> Emphasize your Part 141 program, reduced hour minimums, and the potential to build time as a CFI at your school.</p>
+                        </div>
+                        <div class="bg-white shadow-lg rounded-lg p-6">
+                            <h4 class="font-semibold text-lg mb-2 text-gray-800">The Charter Client: "Business Brenda"</h4>
+                            <p class="mb-2"><b>Who:</b> 45, regional business executive, law firm partner, or consultant.</p>
+                            <p class="mb-2"><b>Needs:</b> Speed, efficiency, and reliability. Needs to visit 3 cities in 1 day.</p>
+                            <p><b>Marketing:</b> Emphasize safety (your Part 135 certification), time-savings, and privacy.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-700">Recommended Marketing Channels</h3>
+                    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><b>Google Business Profile (Local SEO):</b> Your #1 priority. Get 5-star reviews.</li>
+                            <li><b>Simple, Professional Website:</b> Mobile-friendly with clear "Start Flying" and "Book a Flight" paths.</li>
+                            <li><b>Targeted Google Ads:</b> Bid on "flight school near me" and "private charter [your city]."</li>
+                            <li><b>Aviation Partners:</b> Build relationships with the local FBO, airport management, and mechanics for referrals.</li>
+                            <li><b>Business Partners (Charter):</b> Connect with corporate travel departments, executive assistants, and luxury hotel concierges.</li>
+                            <li><b>Social Media (Instagram/YouTube):</b> Post videos of a student's "first solo," aircraft walk-arounds, and "day in the life" content.</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-700">3 "Quick-Win" Ideas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white shadow-lg rounded-lg p-6 border-t-4 border-indigo-500">
+                            <h4 class="font-semibold text-lg mb-2">1. The "Discovery Flight" Lead Magnet</h4>
+                            <p>Market a 30-minute, $99-$149 introductory flight. It's the #1 conversion tool for a flight school. Promote it as "the perfect gift" or "see your house from the air."</p>
+                        </div>
+                        <div class="bg-white shadow-lg rounded-lg p-6 border-t-4 border-indigo-500">
+                            <h4 class="font-semibold text-lg mb-2">2. Host a "Become a Pilot" Seminar</h4>
+                            <p>A free 1-hour open house at your hangar. Explain the process, costs, and careers. You get a room full of qualified leads and can sign them up for Discovery Flights on the spot.</p>
+                        </div>
+                        <div class="bg-white shadow-lg rounded-lg p-6 border-t-4 border-indigo-500">
+                            <h4 class="font-semibold text-lg mb-2">3. Direct B2B Charter Outreach</h4>
+                            <p>Identify the top 20 regional companies, law firms, and developers. Find their executive assistants on LinkedIn. Send a personal email offering 10% off their first booking.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 5. AI Process Log Page -->
+                <div id="page-ai-log" class="page-content">
+                    <div class="bg-white shadow-lg rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">AI Process Log</h3>
+                        <p class="text-gray-700 mb-4">This log details the internal prompts, tasks, and search queries used to break down your request and assemble the Launch Pack, following the structure of your initial brief.</p>
+                        
+                        <div class="space-y-4">
+                            <!-- Task 1 -->
+                            <div>
+                                <h4 class="font-semibold text-gray-800">1. Task: Generate 1-Page Overview</h4>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 bg-gray-50 p-4 rounded-md mt-2">
+                                    <li><b>Internal Prompt:</b> "Define the business model, mission, target audiences (school vs. charter), and a unique selling proposition for a new hybrid aviation company named 'Steven's Charter Flight School'."</li>
+                                    <li><b>Search Query:</b> `"how to start a charter flight school business United States"` (To understand the general business model and USP).</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Task 2 -->
+                            <div>
+                                <h4 class="font-semibold text-gray-800">2. Task: Create Step-by-Step Launch Plan</h4>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 bg-gray-50 p-4 rounded-md mt-2">
+                                    <li><b>Internal Prompt:</b> "Outline a 4-phase launch plan for a new aviation business, covering: 1. Foundation & Legal, 2. FAA Certification, 3. Assets & Team, 4. Go-Live. Detail the specific FAA certification steps for both a flight school and a charter operation."</li>
+                                    <li><b>Search Queries:</b>
+                                        <ul classclass="list-circle list-inside ml-4">
+                                            <li>`"FAA requirements for starting a Part 141 flight school"` (For Phase 2)</li>
+                                            <li>`"FAA requirements for starting a Part 135 charter operation"` (For Phase 2)</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Task 3 -->
+                            <div>
+                                <h4 class="font-semibold text-gray-800">3. Task: Summarize Key Regulations</h4>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 bg-gray-50 p-4 rounded-md mt-2">
+                                    <li><b>Internal Prompt:</b> "Explain the key differences and purposes of FAA Part 61, Part 141, and Part 135. For each, find a credible, citable source, preferably from FAA.gov."</li>
+                                    <li><b>Search Queries:</b>
+                                        <ul class="list-circle list-inside ml-4">
+                                            <li>`"difference between FAA Part 61 and Part 141 flight training"`</li>
+                                            <li>`"FAA.gov official source Part 61 regulations"`</li>
+                                            <li>`"FAA.gov official source Part 141 regulations"`</li>
+                                            <li>`"FAA.gov official source Part 135 regulations"`</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Task 4 -->
+                            <div>
+                                <h4 class="font-semibold text-gray-800">4. Task: Build Go-to-Market Outline</h4>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 bg-gray-50 p-4 rounded-md mt-2">
+                                    <li><b>Internal Prompt:</b> "Develop a lean go-to-market plan for a new flight school and charter service. Include: 1. Two target audience personas (student, charter client), 2. Recommended marketing channels, 3. Three low-cost 'quick-win' marketing tactics."</li>
+                                    <li><b>Search Query:</b> `"marketing strategies for new flight schools and charter services"`</li>
+                                </ul>
+                            </div>
+
+                            <!-- Task 5 -->
+                            <div>
+                                <h4 class="font-semibold text-gray-800">5. Task: Synthesize and Format</h4>
+                                <ul class="list-disc list-inside text-gray-700 space-y-1 bg-gray-50 p-4 rounded-md mt-2">
+                                    <li><b>Internal Prompt:</b> "Assemble all generated content into a single, comprehensive, and scannable HTML dashboard. Convert the static 'Launch Plan' into an interactive checklist with a live progress bar. Ensure all navigation and interactive elements (tabs, accordions) are functional."</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- Mobile sidebar overlay -->
+        <div id="sidebar-overlay" class="md:hidden fixed inset-0 bg-black opacity-50 z-20 hidden"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageContents = document.querySelectorAll('.page-content');
+            const pageTitle = document.getElementById('page-title');
+            
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            const taskWrappers = document.querySelectorAll('.task-wrapper');
+            const totalTasks = taskWrappers.length;
+            
+            const totalProgressBar = document.getElementById('total-progress-bar');
+            const totalProgressText = document.getElementById('total-progress-text');
+            
+            const accordionToggles = document.querySelectorAll('.accordion-toggle');
+
+            const openMenuBtn = document.getElementById('open-menu');
+            const closeMenuBtn = document.getElementById('close-menu');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            // --- Mobile Menu ---
+            function openMenu() {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.remove('hidden');
+            }
+
+            function closeMenu() {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.add('hidden');
+            }
+
+            openMenuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            sidebarOverlay.addEventListener('click', closeMenu);
+
+            // --- Page Navigation ---
+            function navigateToPage(pageName) {
+                // Update Nav Links
+                navLinks.forEach(link => {
+                    if (link.dataset.page === pageName) {
+                        link.classList.add('active');
+                        pageTitle.textContent = link.querySelector('span').textContent;
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                // Update Page Content
+                pageContents.forEach(page => {
+                    if (page.id === 'page-' + pageName) {
+                        page.classList.add('active');
+                    } else {
+                        page.classList.remove('active');
+                    }
+                });
+
+                // Close mobile menu on navigation
+                if (window.innerWidth < 768) {
+                    closeMenu();
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageName = e.currentTarget.dataset.page;
+                    navigateToPage(pageName);
+                    // Update URL hash
+                    window.location.hash = pageName;
+                });
+            });
+            
+            // Check hash on load
+            const initialPage = window.location.hash.substring(1) || 'overview';
+            navigateToPage(initialPage);
+
+            // --- Tabbed Interface (Launch Plan) ---
+            tabLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabName = e.currentTarget.dataset.tab;
+
+                    tabLinks.forEach(tab => {
+                        if (tab.dataset.tab === tabName) {
+                            tab.classList.add('active');
+                        } else {
+                            tab.classList.remove('active');
+                        }
+                    });
+
+                    tabContents.forEach(content => {
+                        if (content.id === 'tab-' + tabName) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // --- Interactive Checklist & Progress Bar ---
+            function updateProgress() {
+                const completedTasks = document.querySelectorAll('.task-wrapper.completed').length;
+                const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                
+                totalProgressBar.style.width = percentage + '%';
+                totalProgressText.textContent = `${percentage}% Complete (${completedTasks}/${totalTasks} tasks)`;
+            }
+
+            taskWrappers.forEach(wrapper => {
+                const taskItem = wrapper.querySelector('.task-item');
+                const checkbox = wrapper.querySelector('.checkbox-icon');
+                const details = wrapper.querySelector('.task-details');
+                const icon = wrapper.querySelector('.task-toggle-icon');
+
+                // Toggle details
+                if (taskItem && details && icon) {
+                    taskItem.addEventListener('click', () => {
+                        details.classList.toggle('open');
+                        icon.classList.toggle('open');
+                    });
+                }
+
+                // Toggle completion
+                if (checkbox) {
+                    checkbox.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Stop the click from bubbling up to taskItem
+                        wrapper.classList.toggle('completed');
+                        updateProgress();
+                    });
+                }
+            });
+            
+            // Initial progress calculation
+            updateProgress();
+
+            // --- Accordion (Regulations) ---
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.accordion-icon');
+                    
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
